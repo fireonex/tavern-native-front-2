@@ -1,12 +1,13 @@
 export type LoginResponse = {
     token: string;
     userId: string;
+    username: string;
 };
 
 export type RegisterResponse = {
     userId: string;
     token: string;
-    message: string;
+    username: string;
 };
 
 

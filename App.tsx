@@ -13,10 +13,10 @@ import {UserPage} from "./src/user/UserPage";
 export type RootStackParamList = {
     Login: undefined;
     Register: undefined;
-    // UserPage: { userId: string; token: string };
+    UserPage: { userId: string; username: string;};
 };
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 async function loadApplication() {
     await Font.loadAsync({
@@ -38,10 +38,10 @@ function RootStack() {
         >
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegistrationScreen} />
-            {/*<Stack.Screen*/}
-            {/*    name="UserPage"*/}
-            {/*    component={UserPage}*/}
-            {/*/>*/}
+            <Stack.Screen
+                name="UserPage"
+                component={UserPage}
+            />
         </Stack.Navigator>
     );
 }

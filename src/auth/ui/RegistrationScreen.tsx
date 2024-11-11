@@ -34,7 +34,10 @@ export const RegistrationScreen = () => {
         if (Object.keys(newErrors).length === 0) {
             try {
                 const result = await registerUser({username, email, password}).unwrap();
-                //navigation.navigate('UserPage', { userId: result.userId, token: result.token });
+                navigation.navigate('UserPage', {
+                    userId: result.userId,
+                    username: result.username,
+                });
             } catch (err) {
                 console.error('Failed to register:', err);
             }

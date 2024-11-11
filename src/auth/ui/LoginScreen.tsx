@@ -33,7 +33,10 @@ export const LoginScreen = () => {
         if (Object.keys(newErrors).length === 0) {
             try {
                 const response = await loginUser({email, password}).unwrap();
-                //navigation.navigate('UserPage', { userId: response.userId, token: response.token });
+                navigation.navigate('UserPage', {
+                    userId: response.userId,
+                    username: response.username,
+                });
             } catch (err) {
                 console.error('Failed to login:', err);
             }
