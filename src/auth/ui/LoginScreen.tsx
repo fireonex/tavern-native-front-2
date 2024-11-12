@@ -8,6 +8,8 @@ import {useRegistration} from "../model/useRegistartion";
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../../App";
+import {useDispatch} from "react-redux";
+import {authSlice} from "../model/authSlice";
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
@@ -26,13 +28,16 @@ export const LoginScreen = () => {
         handlePasswordBlur
     } = useRegistration()
 
+    const dispatch = useDispatch();
+
     const handleLogin = async () => {
-        const fieldsToValidate = {email, password};
+        const fieldsToValidate = { email, password };
         const newErrors = validateFields(fieldsToValidate);
 
         if (Object.keys(newErrors).length === 0) {
             try {
-                const response = await loginUser({email, password}).unwrap();
+                const response = await loginUser({ email, password }).unwrap();
+                dispatch(authSlice.actions.setToken(response.token));
                 navigation.navigate('UserPage', {
                     userId: response.userId,
                     username: response.username,
@@ -42,6 +47,7 @@ export const LoginScreen = () => {
             }
         }
     };
+
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

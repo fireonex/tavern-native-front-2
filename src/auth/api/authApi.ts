@@ -5,7 +5,7 @@ import {GetUserResponse, LoginRequest, LoginResponse, RegisterRequest, RegisterR
 export const authApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://192.168.0.109:5000/api/',
+        baseUrl: 'http://192.168.0.109:5000/api/users/',
         prepareHeaders: (headers) => {
             headers.set('Content-Type', 'application/json');
             return headers;
@@ -30,11 +30,11 @@ export const authApi = createApi({
         }),
 
         getUser: builder.query<GetUserResponse, string>({
-            query: (token) => ({
-                url: 'user',
+            query: (id) => ({
+                url: `user/${id}`,
                 method: 'GET',
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${id}`,
                 },
             }),
         }),
