@@ -33,7 +33,6 @@ export const RaceSelector = ({race, setRace, raceMenuVisible, setRaceMenuVisible
                     <Menu.Item
                         key={r}
                         onPress={() => {
-                            console.log('Selected Race: ', r);
                             setRace(r);
                             setRaceMenuVisible(false);
                         }}

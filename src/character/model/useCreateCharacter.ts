@@ -10,7 +10,8 @@ export const useCreateCharacter = () => {
     const [traits, setTraits] = useState<string[]>([]);
     const [race, setRace] = useState('');
     const [backstory, setBackstory] = useState('');
-    const [createCharacter, { isLoading, isError, error }] = useCreateCharacterMutation();
+    const [error, setError] = useState<string | null>(null);
+    const [createCharacter, { isLoading, isError, error: apiError, isSuccess }] = useCreateCharacterMutation();
 
     // Видимость меню
     const [socialClassMenuVisible, setSocialClassMenuVisible] = useState(false);
@@ -18,7 +19,12 @@ export const useCreateCharacter = () => {
     const [raceMenuVisible, setRaceMenuVisible] = useState(false);
     const [genderMenuVisible, setGenderMenuVisible] = useState(false);
 
+    // Обработчик создания персонажа
     const handleCreateCharacter = async () => {
+        // Сбрасываем ошибку в начале
+        setError(null);
+
+        // Проверяем валидность полей
         if (
             name.trim() === '' ||
             age.trim() === '' ||
@@ -26,18 +32,18 @@ export const useCreateCharacter = () => {
             socialClass.trim() === '' ||
             race.trim() === ''
         ) {
-            console.error('Please fill in all required fields');
+            setError('Please fill in all required fields');
             return;
         }
 
         const parsedAge = parseInt(age, 10);
         if (isNaN(parsedAge) || parsedAge <= 0) {
-            console.error('Age must be a valid positive number');
+            setError('Age must be a valid positive number');
             return;
         }
 
         if (traits.length === 0) {
-            console.error('Please select at least one trait');
+            setError('Please select at least one trait');
             return;
         }
 
@@ -57,13 +63,23 @@ export const useCreateCharacter = () => {
         }
     };
 
+    const handleNameChange = (value: string) => {
+        setName(value);
+        setError(null);
+    };
+
+    const handleAgeChange = (value: string) => {
+        setAge(value);
+        setError(null);
+    };
+
 
 
     return {
         name,
-        setName,
+        setName: handleNameChange,
         age,
-        setAge,
+        setAge: handleAgeChange,
         gender,
         setGender,
         socialClass,
@@ -76,7 +92,7 @@ export const useCreateCharacter = () => {
         setBackstory,
         isLoading,
         isError,
-        error,
+        apiError,
         socialClassMenuVisible,
         setSocialClassMenuVisible,
         traitsMenuVisible,
@@ -86,5 +102,7 @@ export const useCreateCharacter = () => {
         genderMenuVisible,
         setGenderMenuVisible,
         handleCreateCharacter,
+        error,
+        isSuccess,
     };
 };

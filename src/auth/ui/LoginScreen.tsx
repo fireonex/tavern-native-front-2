@@ -34,13 +34,20 @@ export const LoginScreen = () => {
     const dispatch = useDispatch();
 
     const handleLogin = async () => {
-        const fieldsToValidate = {email, password};
+        const fieldsToValidate = { email, password };
         const newErrors = validateFields(fieldsToValidate);
 
         if (Object.keys(newErrors).length === 0) {
             try {
-                const response = await loginUser({email, password}).unwrap();
+                const response = await loginUser({ email, password }).unwrap();
+
                 dispatch(authSlice.actions.setToken(response.token));
+
+                dispatch(authSlice.actions.setUserInfo({
+                    userId: response.userId,
+                    username: response.username,
+                }));
+
                 navigation.navigate('UserPage', {
                     userId: response.userId,
                     username: response.username,

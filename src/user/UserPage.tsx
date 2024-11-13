@@ -1,8 +1,7 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from "../../App";
-import {CreateCharacterScreen} from "../character/ui/CreateCharacterScreen";
 import {Typography} from "../common/components/Typography";
 import {Button} from "../common/components/Button";
 import {useNavigation} from "@react-navigation/native";
@@ -11,7 +10,7 @@ import {CharacterList} from "../character/ui/CharacterList";
 
 type UserPageProps = StackScreenProps<RootStackParamList, 'UserPage'>;
 
-type UserPageScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'UserPage'>;
+export type UserPageScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'UserPage'>;
 
 export const UserPage = ({route}: UserPageProps) => {
     const {userId, username} = route.params;
@@ -20,7 +19,7 @@ export const UserPage = ({route}: UserPageProps) => {
 
     return (
         <View style={[styles.container]}>
-            <Typography text={'Profile'}/>
+            <Typography text={'Profile'} variant={'title2'}/>
             {/*<Text>UserId: {userId}</Text>*/}
             {/*<Text>Username: {username}</Text>*/}
             <View>

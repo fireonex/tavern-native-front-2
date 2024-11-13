@@ -35,7 +35,6 @@ export const TraitsSelector = ({traitsMenuVisible, setTraitsMenuVisible, traits,
                     <Menu.Item
                         key={trait}
                         onPress={() => {
-                            console.log('Selected Trait: ', trait);
                             if (traits.includes(trait)) {
                                 setTraits(traits.filter((t) => t !== trait));
                             } else if (traits.length < 3) {

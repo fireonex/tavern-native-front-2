@@ -38,7 +38,6 @@ export const SocialClassSelector = ({
                     <Menu.Item
                         key={cls}
                         onPress={() => {
-                            console.log('Selected Class: ', cls);
                             setSocialClass(cls);
                             setSocialClassMenuVisible(false);
                         }}

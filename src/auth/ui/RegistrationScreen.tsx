@@ -10,6 +10,8 @@ import {RootStackParamList} from "../../../App";
 import {Button} from "../../common/components/Button";
 import {InlineButton} from "../../common/components/InlineButton";
 import {Typography} from "../../common/components/Typography";
+import {useDispatch} from "react-redux";
+import {authSlice} from "../model/authSlice";
 
 type RegisterScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
@@ -30,6 +32,8 @@ export const RegistrationScreen = () => {
         handlePasswordBlur
     } = useRegistration()
 
+    const dispatch = useDispatch();
+
     const handleRegister = async () => {
         const fieldsToValidate = {email, password, username};
         const newErrors = validateFields(fieldsToValidate);
@@ -37,6 +41,14 @@ export const RegistrationScreen = () => {
         if (Object.keys(newErrors).length === 0) {
             try {
                 const result = await registerUser({username, email, password}).unwrap();
+
+                dispatch(authSlice.actions.setToken(result.token));
+
+                dispatch(authSlice.actions.setUserInfo({
+                    userId: result.userId,
+                    username: result.username,
+                }));
+
                 navigation.navigate('UserPage', {
                     userId: result.userId,
                     username: result.username,

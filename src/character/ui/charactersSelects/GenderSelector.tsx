@@ -34,7 +34,6 @@ export const GenderSelector = ({gender, setGender, genderMenuVisible, setGenderM
                     <Menu.Item
                         key={g}
                         onPress={() => {
-                            console.log('Selected Gender: ', g);
                             setGender(g);
                             setGenderMenuVisible(false);
                         }}
