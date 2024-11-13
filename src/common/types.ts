@@ -4,7 +4,21 @@ export type User = {
     email: string;
 };
 
+export type Character = {
+    _id: string;
+    userId: string;
+    name: string;
+    age: number;
+    gender: Gender;
+    traits: Traits[];
+    race: Race;
+    socialClass: SocialClasses;
+    backstory?: string;
+};
+
 export type Gender = 'Male' | 'Female' | 'Other';
+
+export type Race = 'Human' | 'High Elf' | 'Wood Elf' | 'Dwarf' | 'Orc';
 
 export type Traits = 'Brave'
     | 'Honest'

@@ -7,6 +7,9 @@ import {EmailPasswordForm} from "./EmailPasswordForm";
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../../App";
+import {Button} from "../../common/components/Button";
+import {InlineButton} from "../../common/components/InlineButton";
+import {Typography} from "../../common/components/Typography";
 
 type RegisterScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
@@ -49,7 +52,7 @@ export const RegistrationScreen = () => {
             <View style={{flex: 1}}>
                 <View style={authStyles.container}>
                     <View style={{marginBottom: 50}}>
-                        <Text style={authStyles.title}>Register</Text>
+                        <Typography text={'Register'} variant={'title'}/>
                     </View>
                     <View>
                         <View style={authStyles.inputsContainer}>
@@ -60,35 +63,24 @@ export const RegistrationScreen = () => {
                                 onChangeText={handleUsernameChange}
                                 onBlur={handleUsernameBlur}
                             />
-                            {errors.username && <Text style={authStyles.errorText}>{errors.username}</Text>}
-
-
+                            {errors.username && <Typography text={errors.username} variant={'error'}/>}
                             <EmailPasswordForm password={password} email={email} handleEmailChange={handleEmailChange}
                                                handlePasswordChange={handlePasswordChange} errors={errors}
                                                handleEmailBlur={handleEmailBlur} handlePasswordBlur={handlePasswordBlur}
                             />
                         </View>
-                        <TouchableOpacity style={authStyles.customButton} onPress={handleRegister} disabled={isLoading}>
-                            <Text style={authStyles.buttonText}>Register</Text>
-                        </TouchableOpacity>
+                        <Button onPress={handleRegister} disabled={isLoading} text={'Register'}/>
                     </View>
-                    {
-                        isSuccess && <Text style={authStyles.successText}>Register successful!</Text>
-                    }
+                    {isSuccess && <Typography text={'Register successful!'} variant={'regularCenter'}/>}
                     {
                         apiError && (
-                            <Text style={authStyles.errorText}>
-                                {(apiError as any).data?.message || "An error occurred during registration"}
-                            </Text>
+                            <Typography text={(apiError as any).data?.message || "An error occurred during registration"}
+                                        variant={'error'}/>
                         )
                     }
                     <View style={authStyles.smallContainer}>
-                        <Text style={authStyles.successText}>Already have an account?</Text>
-                        <TouchableOpacity style={{marginTop: 5}}
-                                          onPress={() => navigation.navigate('Login')}
-                                          disabled={isLoading}>
-                            <Text style={authStyles.inlineButtonText}>Login</Text>
-                        </TouchableOpacity>
+                        <Typography text={'Already have an account?'} variant={"regularCenter"}/>
+                        <InlineButton onPress={() => navigation.navigate('Login')} disabled={isLoading} text={'Login'}/>
                     </View>
                 </View>
             </View>

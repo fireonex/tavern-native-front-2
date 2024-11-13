@@ -1,5 +1,5 @@
 import React from 'react';
-import {Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View,} from 'react-native';
+import {Keyboard, TouchableWithoutFeedback, View,} from 'react-native';
 import {useLoginUserMutation} from "../api/authApi";
 import {authStyles} from "./styles/authStyles";
 
@@ -10,6 +10,9 @@ import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../../App";
 import {useDispatch} from "react-redux";
 import {authSlice} from "../model/authSlice";
+import {Button} from "../../common/components/Button";
+import {InlineButton} from "../../common/components/InlineButton";
+import {Typography} from "../../common/components/Typography";
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
@@ -31,12 +34,12 @@ export const LoginScreen = () => {
     const dispatch = useDispatch();
 
     const handleLogin = async () => {
-        const fieldsToValidate = { email, password };
+        const fieldsToValidate = {email, password};
         const newErrors = validateFields(fieldsToValidate);
 
         if (Object.keys(newErrors).length === 0) {
             try {
-                const response = await loginUser({ email, password }).unwrap();
+                const response = await loginUser({email, password}).unwrap();
                 dispatch(authSlice.actions.setToken(response.token));
                 navigation.navigate('UserPage', {
                     userId: response.userId,
@@ -54,7 +57,7 @@ export const LoginScreen = () => {
             <View style={{flex: 1}}>
                 <View style={authStyles.container}>
                     <View style={{marginBottom: 50}}>
-                        <Text style={authStyles.title}>Login</Text>
+                        <Typography text={'Login'} variant={'title'}/>
                     </View>
                     <View>
                         <View style={authStyles.inputsContainer}>
@@ -63,23 +66,17 @@ export const LoginScreen = () => {
                                                handleEmailBlur={handleEmailBlur} handlePasswordBlur={handlePasswordBlur}
                             />
                         </View>
-                        <TouchableOpacity style={authStyles.customButton} onPress={handleLogin} disabled={isLoading}>
-                            <Text style={authStyles.buttonText}>Login</Text>
-                        </TouchableOpacity>
+                        <Button onPress={handleLogin} disabled={isLoading} text={'Login'}/>
                     </View>
-                    {isSuccess && <Text style={authStyles.successText}>Login successful!</Text>}
+                    {isSuccess && <Typography text={'Login successful!'} variant={'regularCenter'}/>}
                     {apiError && (
-                        <Text style={authStyles.errorText}>
-                            {(apiError as any).data?.message || "An error occurred during login"}
-                        </Text>
+                        <Typography text={(apiError as any).data?.message || "An error occurred during login"}
+                                    variant={'error'}/>
                     )}
                     <View style={authStyles.smallContainer}>
-                        <Text style={authStyles.successText}>Don't have an account?</Text>
-                        <TouchableOpacity style={{marginTop: 5}}
-                                          onPress={() => navigation.navigate('Register')}
-                                          disabled={isLoading}>
-                            <Text style={authStyles.inlineButtonText}>Register</Text>
-                        </TouchableOpacity>
+                        <Typography text={'Don\'t have an account?'} variant={'regularCenter'}/>
+                        <InlineButton onPress={() => navigation.navigate('Register')} disabled={isLoading}
+                                      text={'Register'}/>
                     </View>
                 </View>
             </View>

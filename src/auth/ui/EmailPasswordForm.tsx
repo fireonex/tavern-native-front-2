@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, TextInput } from "react-native";
 import { authStyles } from "./styles/authStyles";
 import { FormErrors } from "../model/useValidation";
+import {Typography} from "../../common/components/Typography";
 
 type Props = {
     email: string;
@@ -23,8 +24,7 @@ export const EmailPasswordForm = ({ email, password, handleEmailChange, handlePa
                 onChangeText={handleEmailChange}
                 onBlur={handleEmailBlur} // Обработчик потери фокуса
             />
-            {errors.email && <Text style={authStyles.errorText}>{errors.email}</Text>}
-
+            {errors.email && <Typography text={errors.email} variant={'error'}/>}
             <TextInput
                 style={authStyles.input}
                 placeholder="Password"
@@ -33,7 +33,7 @@ export const EmailPasswordForm = ({ email, password, handleEmailChange, handlePa
                 onChangeText={handlePasswordChange}
                 onBlur={handlePasswordBlur} // Обработчик потери фокуса
             />
-            {errors.password && <Text style={authStyles.errorText}>{errors.password}</Text>}
+            {errors.password && <Typography text={errors.password} variant={'error'}/>}
         </>
     );
 };
