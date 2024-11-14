@@ -24,6 +24,7 @@ export const useCreateCharacter = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState<'info' | 'success' | 'error'>('info');
 
+    // Функция для создания персонажа
     const handleCreateCharacter = async () => {
         setError(null);
 
@@ -63,6 +64,7 @@ export const useCreateCharacter = () => {
             setAlertMessage('Character created successfully!');
             setAlertType('success');
             setAlertVisible(true);
+            resetFields();
         } catch (err) {
             console.error('Failed to create character:', err);
             setAlertMessage('Failed to create character');
@@ -71,21 +73,23 @@ export const useCreateCharacter = () => {
         }
     };
 
-    const handleNameChange = (value: string) => {
-        setName(value);
-        setError(null);
-    };
-
-    const handleAgeChange = (value: string) => {
-        setAge(value);
+    // Функция для сброса всех полей формы
+    const resetFields = () => {
+        setName('');
+        setAge('');
+        setGender('');
+        setSocialClass('');
+        setTraits([]);
+        setRace('');
+        setBackstory('');
         setError(null);
     };
 
     return {
         name,
-        setName: handleNameChange,
+        setName,
         age,
-        setAge: handleAgeChange,
+        setAge,
         gender,
         setGender,
         socialClass,

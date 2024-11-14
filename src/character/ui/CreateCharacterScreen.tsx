@@ -1,19 +1,19 @@
-import React, {useEffect} from 'react';
-import {ScrollView, TextInput, View, KeyboardAvoidingView, Platform} from 'react-native';
+import React, { useEffect } from 'react';
+import { ScrollView, TextInput, View, KeyboardAvoidingView, Platform } from 'react-native';
 import tw from 'twrnc';
-import {useCreateCharacter} from '../model/useCreateCharacter';
-import {GenderSelector} from "./charactersSelects/GenderSelector";
-import {RaceSelector} from "./charactersSelects/RaceSelector";
-import {TraitsSelector} from "./charactersSelects/TraitsSelector";
-import {SocialClassSelector} from "./charactersSelects/SocialClassSelector";
-import {Typography} from "../../common/components/Typography";
-import {Button} from "../../common/components/Button";
-import {useNavigation} from "@react-navigation/native";
-import {NativeStackNavigationProp} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../../../App";
-import {useSelector} from 'react-redux';
-import {RootState} from '../../store';
-import {Alert} from "../../common/components/Alert";
+import { useCreateCharacter } from '../model/useCreateCharacter';
+import { GenderSelector } from "./charactersSelects/GenderSelector";
+import { RaceSelector } from "./charactersSelects/RaceSelector";
+import { TraitsSelector } from "./charactersSelects/TraitsSelector";
+import { SocialClassSelector } from "./charactersSelects/SocialClassSelector";
+import { Typography } from "../../common/components/Typography";
+import { Button } from "../../common/components/Button";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../App";
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { Alert } from "../../common/components/Alert";
 
 export type CreateCharacterScreenNavigationProp =
     NativeStackNavigationProp<RootStackParamList, 'CreateCharacter'>;
@@ -62,7 +62,7 @@ export const CreateCharacterScreen = () => {
         alertType,
     } = useCreateCharacter();
 
-    const InputStyle = [tw`border border-gray-300 p-3 mb-5 rounded text-lg`, {fontFamily: 'Regular'}];
+    const InputStyle = [tw`border border-gray-300 p-3 mb-5 rounded text-lg`, { fontFamily: 'Regular' }];
 
     return (
         <KeyboardAvoidingView
@@ -71,7 +71,7 @@ export const CreateCharacterScreen = () => {
         >
             <ScrollView contentContainerStyle={tw`px-5 pb-5 pt-18`} keyboardShouldPersistTaps="handled">
                 <View style={tw`mb-5`}>
-                    <Typography text={`Create Your Character`} variant={'title2'}/>
+                    <Typography text={`Create Your Character`} variant={'title2'} />
                 </View>
 
                 <TextInput
@@ -91,14 +91,14 @@ export const CreateCharacterScreen = () => {
 
                 {/* Селекторы для создания персонажа */}
                 <GenderSelector gender={gender} setGender={setGender} setGenderMenuVisible={setGenderMenuVisible}
-                                genderMenuVisible={genderMenuVisible}/>
+                                genderMenuVisible={genderMenuVisible} />
                 <RaceSelector race={race} setRace={setRace} setRaceMenuVisible={setRaceMenuVisible}
-                              raceMenuVisible={raceMenuVisible}/>
+                              raceMenuVisible={raceMenuVisible} />
                 <SocialClassSelector setSocialClass={setSocialClass} socialClass={socialClass}
                                      socialClassMenuVisible={socialClassMenuVisible}
-                                     setSocialClassMenuVisible={setSocialClassMenuVisible}/>
+                                     setSocialClassMenuVisible={setSocialClassMenuVisible} />
                 <TraitsSelector setTraits={setTraits} traits={traits} setTraitsMenuVisible={setTraitsMenuVisible}
-                                traitsMenuVisible={traitsMenuVisible}/>
+                                traitsMenuVisible={traitsMenuVisible} />
 
                 <TextInput
                     style={InputStyle}
@@ -108,7 +108,7 @@ export const CreateCharacterScreen = () => {
                     multiline
                 />
 
-                <Button onPress={handleCreateCharacter} text={'Create Character'} disabled={isLoading}/>
+                <Button onPress={handleCreateCharacter} text={'Create Character'} disabled={isLoading} />
 
                 <Button onPress={() => {
                     if (userId && username) {
@@ -119,7 +119,7 @@ export const CreateCharacterScreen = () => {
                     } else {
                         console.error('User information is missing. Please login again.');
                     }
-                }} text={'Back to user page'}/>
+                }} text={'Back to user page'} />
             </ScrollView>
 
             {alertVisible && (
