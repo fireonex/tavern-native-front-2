@@ -14,6 +14,7 @@ const typographyVariants = {
     'regularCenter': [tw`text-center text-base text-black mt-[10px]`, {fontFamily: 'Regular'}],
     'regularTitle': [tw`text-center text-xl text-black my-2`, {fontFamily: 'FantasyRegular'}],
     'regular': [tw`text-base text-black`, {fontFamily: 'Regular'}],
+    'regularWhite': [tw`text-base text-white`, {fontFamily: 'Regular'}],
     'regularBold': [tw`text-xl text-black bold`, {fontFamily: 'Regular'}],
 }
 

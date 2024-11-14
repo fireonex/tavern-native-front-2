@@ -19,12 +19,14 @@ export const useCreateCharacter = () => {
     const [raceMenuVisible, setRaceMenuVisible] = useState(false);
     const [genderMenuVisible, setGenderMenuVisible] = useState(false);
 
-    // Обработчик создания персонажа
+    // Состояния для уведомления
+    const [alertVisible, setAlertVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState<'info' | 'success' | 'error'>('info');
+
     const handleCreateCharacter = async () => {
-        // Сбрасываем ошибку в начале
         setError(null);
 
-        // Проверяем валидность полей
         if (
             name.trim() === '' ||
             age.trim() === '' ||
@@ -58,8 +60,14 @@ export const useCreateCharacter = () => {
                 backstory: backstory.trim(),
             }).unwrap();
             console.log('Character created:', result);
+            setAlertMessage('Character created successfully!');
+            setAlertType('success');
+            setAlertVisible(true);
         } catch (err) {
             console.error('Failed to create character:', err);
+            setAlertMessage('Failed to create character');
+            setAlertType('error');
+            setAlertVisible(true);
         }
     };
 
@@ -72,8 +80,6 @@ export const useCreateCharacter = () => {
         setAge(value);
         setError(null);
     };
-
-
 
     return {
         name,
@@ -104,5 +110,10 @@ export const useCreateCharacter = () => {
         handleCreateCharacter,
         error,
         isSuccess,
+        // Уведомления
+        alertVisible,
+        setAlertVisible,
+        alertMessage,
+        alertType,
     };
 };

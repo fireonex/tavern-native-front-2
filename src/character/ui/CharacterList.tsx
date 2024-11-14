@@ -1,21 +1,31 @@
-import React, {useCallback} from 'react';
-import {ScrollView, Text, View, ActivityIndicator} from 'react-native';
-import {useGetCharactersQuery} from '../api/characterApi';
+import React, {useState} from 'react';
+import {ActivityIndicator, ScrollView, Text, View} from 'react-native';
+import {useDeleteCharacterMutation, useGetCharactersQuery} from '../api/characterApi';
 import tw from 'twrnc';
 import {Character} from "../../common/types";
-import {useFocusEffect} from "@react-navigation/native";
 import {Typography} from "../../common/components/Typography";
+import {Button} from "../../common/components/Button";
+import {Alert} from "../../common/components/Alert";
 
 export const CharacterList = () => {
-    const {data: characters, error, isLoading, refetch} = useGetCharactersQuery();
+    const {data: characters, error, isLoading} = useGetCharactersQuery();
+    const [deleteCharacter, {isLoading: isDeleting}] = useDeleteCharacterMutation();
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [alertVisible, setAlertVisible] = useState(false);
 
-    useFocusEffect(
-        useCallback(() => {
-            refetch();
-        }, [refetch])
-    );
+    const handleDeleteCharacter = async (characterId: string) => {
+        try {
+            await deleteCharacter(characterId).unwrap();
+            setSuccessMessage('Character deleted successfully');
+            setAlertVisible(true);
+        } catch (error) {
+            setErrorMessage('Failed to delete character');
+            setAlertVisible(true);
+        }
+    };
 
-    if (isLoading) {
+    if (isLoading || isDeleting) {
         return <ActivityIndicator size="large" color="#0000ff"/>;
     }
 
@@ -35,46 +45,62 @@ export const CharacterList = () => {
         );
     }
 
-    const viewBoxStyle = tw`p-2 border border-gray-300 rounded flex flex-row gap-2`
+    const viewBoxStyle = tw`p-2 border border-gray-300 rounded flex flex-row gap-2`;
 
     return (
-        <ScrollView contentContainerStyle={tw`px-5 pt-5`}>
-            {characters.slice().reverse().map((character: Character) => (
-                <View key={character._id} style={tw`mb-5 border rounded-lg border-gray-300 p-2 max-w-[340px]`}>
-                    <View>
-                        <Typography variant={'regularTitle'} text={character.name}/>
-                    </View>
-                    <View style={viewBoxStyle}>
-                        <Typography variant={'regularBold'} text={'Age:'}/>
-                        <Typography variant={'regular'} text={`${character.age}`}/>
-                    </View>
-                    <View style={viewBoxStyle}>
-                        <Typography variant={'regularBold'} text={'Gender:'}/>
-                        <Typography variant={'regular'} text={`${character.gender}`}/>
-                    </View>
-                    <View style={viewBoxStyle}>
-                        <Typography variant={'regularBold'} text={'Race:'}/>
-                        <Typography variant={'regular'} text={`${character.race}`}/>
-                    </View>
-                    <View style={viewBoxStyle}>
-                        <Typography variant={'regularBold'} text={'Social Class:'}/>
-                        <Typography variant={'regular'} text={`${character.socialClass}`}/>
-                    </View>
-                    <View style={viewBoxStyle}>
-                        <Typography variant={'regularBold'} text={'Traits:'}/>
-                        <View style={{flexDirection: 'row', flexWrap: 'wrap', width: '90%'}}>
-                            <Text numberOfLines={3}
-                                  style={[tw`text-base text-black`, {fontFamily: 'Regular'}]}>{character.traits.join(', ')}</Text>
+        <>
+            <ScrollView contentContainerStyle={tw`px-5 pt-5`}>
+                {characters.slice().reverse().map((character: Character) => (
+                    <View key={character._id} style={tw`mb-5 border rounded-lg border-gray-300 p-2 max-w-[340px]`}>
+                        <View>
+                            <Typography variant={'regularTitle'} text={character.name}/>
                         </View>
-                    </View>
-                    {character.backstory &&
-                        <View style={tw`p-2 border border-gray-300 rounded mt-3`}>
-                            <Typography variant={'regularBold'} text={'Backstory:'}/>
-                            <Typography variant={'regular'} text={`${character.backstory}`}/>
+                        <View style={viewBoxStyle}>
+                            <Typography variant={'regularBold'} text={'Age:'}/>
+                            <Typography variant={'regular'} text={`${character.age}`}/>
                         </View>
-                    }
-                </View>
-            ))}
-        </ScrollView>
+                        <View style={viewBoxStyle}>
+                            <Typography variant={'regularBold'} text={'Gender:'}/>
+                            <Typography variant={'regular'} text={`${character.gender}`}/>
+                        </View>
+                        <View style={viewBoxStyle}>
+                            <Typography variant={'regularBold'} text={'Race:'}/>
+                            <Typography variant={'regular'} text={`${character.race}`}/>
+                        </View>
+                        <View style={viewBoxStyle}>
+                            <Typography variant={'regularBold'} text={'Social Class:'}/>
+                            <Typography variant={'regular'} text={`${character.socialClass}`}/>
+                        </View>
+                        <View style={viewBoxStyle}>
+                            <Typography variant={'regularBold'} text={'Traits:'}/>
+                            <View style={{flexDirection: 'row', flexWrap: 'wrap', width: '90%'}}>
+                                <Text numberOfLines={3}
+                                      style={[tw`text-base text-black`, {fontFamily: 'Regular'}]}>{character.traits.join(', ')}</Text>
+                            </View>
+                        </View>
+                        {character.backstory &&
+                            <View style={tw`p-2 border border-gray-300 rounded mt-3`}>
+                                <Typography variant={'regularBold'} text={'Backstory:'}/>
+                                <Typography variant={'regular'} text={`${character.backstory}`}/>
+                            </View>
+                        }
+                        <Button text={'Delete character'} onPress={() => handleDeleteCharacter(character._id)}
+                                disabled={isDeleting}/>
+                    </View>
+                ))}
+            </ScrollView>
+            {(successMessage || errorMessage) && (
+            <Alert
+                message={successMessage || errorMessage || ''}
+                type={successMessage ? 'success' : 'error'}
+                visible={alertVisible}
+                onDismiss={() => {
+                    setAlertVisible(false);
+                    setSuccessMessage(null);
+                    setErrorMessage(null);
+                }}
+            />
+        )}
+        </>
     );
 };

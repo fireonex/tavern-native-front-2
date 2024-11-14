@@ -17,6 +17,7 @@ export const characterApi = createApi({
         },
         timeout: 30000,
     }),
+    tagTypes: ['Character'],
     endpoints: (builder) => ({
         createCharacter: builder.mutation<CreateCharacterResponse, CreateCharacterRequest>({
             query: (characterData) => ({
@@ -24,11 +25,20 @@ export const characterApi = createApi({
                 method: 'POST',
                 body: characterData,
             }),
+            invalidatesTags: [{ type: 'Character', id: 'LIST' }],
         }),
         getCharacters: builder.query<Character[], void>({
             query: () => 'characters',
+            providesTags: [{ type: 'Character', id: 'LIST' }],
+        }),
+        deleteCharacter: builder.mutation<void, string>({
+            query: (characterId) => ({
+                url: `characters/${characterId}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: [{ type: 'Character', id: 'LIST' }],
         }),
     }),
 });
 
-export const { useCreateCharacterMutation, useGetCharactersQuery } = characterApi;
+export const { useCreateCharacterMutation, useGetCharactersQuery, useDeleteCharacterMutation } = characterApi;

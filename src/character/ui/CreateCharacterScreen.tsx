@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
-import { ScrollView, TextInput, View, KeyboardAvoidingView, Platform } from 'react-native';
+import React, {useEffect} from 'react';
+import {ScrollView, TextInput, View, KeyboardAvoidingView, Platform} from 'react-native';
 import tw from 'twrnc';
-import { SerializedError } from '@reduxjs/toolkit';
-import { useCreateCharacter } from '../model/useCreateCharacter';
-import { GenderSelector } from "./charactersSelects/GenderSelector";
-import { RaceSelector } from "./charactersSelects/RaceSelector";
-import { TraitsSelector } from "./charactersSelects/TraitsSelector";
-import { SocialClassSelector } from "./charactersSelects/SocialClassSelector";
-import { Typography } from "../../common/components/Typography";
-import { Button } from "../../common/components/Button";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../../App";
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import {useCreateCharacter} from '../model/useCreateCharacter';
+import {GenderSelector} from "./charactersSelects/GenderSelector";
+import {RaceSelector} from "./charactersSelects/RaceSelector";
+import {TraitsSelector} from "./charactersSelects/TraitsSelector";
+import {SocialClassSelector} from "./charactersSelects/SocialClassSelector";
+import {Typography} from "../../common/components/Typography";
+import {Button} from "../../common/components/Button";
+import {useNavigation} from "@react-navigation/native";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../../../App";
+import {useSelector} from 'react-redux';
+import {RootState} from '../../store';
+import {Alert} from "../../common/components/Alert";
 
 export type CreateCharacterScreenNavigationProp =
     NativeStackNavigationProp<RootStackParamList, 'CreateCharacter'>;
@@ -46,8 +46,8 @@ export const CreateCharacterScreen = () => {
         backstory,
         setBackstory,
         isLoading,
-        isError,
-        apiError,
+        handleCreateCharacter,
+        error,
         socialClassMenuVisible,
         setSocialClassMenuVisible,
         traitsMenuVisible,
@@ -56,12 +56,13 @@ export const CreateCharacterScreen = () => {
         setRaceMenuVisible,
         genderMenuVisible,
         setGenderMenuVisible,
-        handleCreateCharacter,
-        isSuccess,
-        error
+        alertVisible,
+        setAlertVisible,
+        alertMessage,
+        alertType,
     } = useCreateCharacter();
 
-    const InputStyle = [tw`border border-gray-300 p-3 mb-5 rounded text-lg`, { fontFamily: 'Regular' }];
+    const InputStyle = [tw`border border-gray-300 p-3 mb-5 rounded text-lg`, {fontFamily: 'Regular'}];
 
     return (
         <KeyboardAvoidingView
@@ -70,7 +71,7 @@ export const CreateCharacterScreen = () => {
         >
             <ScrollView contentContainerStyle={tw`px-5 pb-5 pt-18`} keyboardShouldPersistTaps="handled">
                 <View style={tw`mb-5`}>
-                    <Typography text={`Create Your Character`} variant={'title2'} />
+                    <Typography text={`Create Your Character`} variant={'title2'}/>
                 </View>
 
                 <TextInput
@@ -90,14 +91,14 @@ export const CreateCharacterScreen = () => {
 
                 {/* Селекторы для создания персонажа */}
                 <GenderSelector gender={gender} setGender={setGender} setGenderMenuVisible={setGenderMenuVisible}
-                                genderMenuVisible={genderMenuVisible} />
-                <RaceSelector race={race} setRace={setRace} raceMenuVisible={raceMenuVisible}
-                              setRaceMenuVisible={setRaceMenuVisible} />
+                                genderMenuVisible={genderMenuVisible}/>
+                <RaceSelector race={race} setRace={setRace} setRaceMenuVisible={setRaceMenuVisible}
+                              raceMenuVisible={raceMenuVisible}/>
                 <SocialClassSelector setSocialClass={setSocialClass} socialClass={socialClass}
                                      socialClassMenuVisible={socialClassMenuVisible}
-                                     setSocialClassMenuVisible={setSocialClassMenuVisible} />
-                <TraitsSelector setTraits={setTraits} setTraitsMenuVisible={setTraitsMenuVisible}
-                                traitsMenuVisible={traitsMenuVisible} traits={traits} />
+                                     setSocialClassMenuVisible={setSocialClassMenuVisible}/>
+                <TraitsSelector setTraits={setTraits} traits={traits} setTraitsMenuVisible={setTraitsMenuVisible}
+                                traitsMenuVisible={traitsMenuVisible}/>
 
                 <TextInput
                     style={InputStyle}
@@ -107,21 +108,7 @@ export const CreateCharacterScreen = () => {
                     multiline
                 />
 
-                <Button onPress={handleCreateCharacter} text={'Create Character'} disabled={isLoading} />
-                {isSuccess &&
-                    <Typography text={'The character has been created successfully!'} variant={'regularCenter'} />
-                }
-
-                {isError && apiError && (
-                    <Typography variant={'error'} text={
-                        'data' in apiError && typeof apiError.data === 'object' && apiError.data !== null && 'message' in (apiError.data as Record<string, any>)
-                            ? (apiError.data as Record<string, any>).message
-                            : (apiError as SerializedError).message || 'An unexpected error occurred'
-                    } />
-                )}
-                {error && (
-                    <Typography variant={'error'} text={error} />
-                )}
+                <Button onPress={handleCreateCharacter} text={'Create Character'} disabled={isLoading}/>
 
                 <Button onPress={() => {
                     if (userId && username) {
@@ -132,8 +119,17 @@ export const CreateCharacterScreen = () => {
                     } else {
                         console.error('User information is missing. Please login again.');
                     }
-                }} text={'Back to user page'} />
+                }} text={'Back to user page'}/>
             </ScrollView>
+
+            {alertVisible && (
+                <Alert
+                    message={alertMessage}
+                    type={alertType}
+                    visible={alertVisible}
+                    onDismiss={() => setAlertVisible(false)}
+                />
+            )}
         </KeyboardAvoidingView>
     );
 };
