@@ -6,8 +6,16 @@ import {Character} from "../../common/types";
 import {Typography} from "../../common/components/Typography";
 import {Button} from "../../common/components/Button";
 import {Alert} from "../../common/components/Alert";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../../../App";
+import {useNavigation} from "@react-navigation/native";
+
+export type CharacterListNavigationProp =
+    NativeStackNavigationProp<RootStackParamList, 'CharacterList'>;
 
 export const CharacterList = () => {
+    const navigation = useNavigation<CharacterListNavigationProp>();
+
     const {data: characters, error, isLoading} = useGetCharactersQuery();
     const [deleteCharacter, {isLoading: isDeleting}] = useDeleteCharacterMutation();
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -84,6 +92,11 @@ export const CharacterList = () => {
                                 <Typography variant={'regular'} text={`${character.backstory}`}/>
                             </View>
                         }
+                        <Button
+                            text={'Edit character'}
+                            onPress={() => navigation.navigate('EditCharacter', { characterId: character._id })}
+                            disabled={isDeleting}
+                        />
                         <Button text={'Delete character'} onPress={() => handleDeleteCharacter(character._id)}
                                 disabled={isDeleting}/>
                     </View>

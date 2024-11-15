@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { ScrollView, TextInput, View, KeyboardAvoidingView, Platform } from 'react-native';
 import tw from 'twrnc';
-import { useCreateCharacter } from '../model/useCreateCharacter';
+import { useCharacterForm } from '../model/useCharacterForm';
 import { GenderSelector } from "./charactersSelects/GenderSelector";
 import { RaceSelector } from "./charactersSelects/RaceSelector";
 import { TraitsSelector } from "./charactersSelects/TraitsSelector";
@@ -45,9 +45,9 @@ export const CreateCharacterScreen = () => {
         setRace,
         backstory,
         setBackstory,
-        isLoading,
+        isCreating,
+        isUpdating,
         handleCreateCharacter,
-        error,
         socialClassMenuVisible,
         setSocialClassMenuVisible,
         traitsMenuVisible,
@@ -60,7 +60,7 @@ export const CreateCharacterScreen = () => {
         setAlertVisible,
         alertMessage,
         alertType,
-    } = useCreateCharacter();
+    } = useCharacterForm({ operation: 'create' });
 
     const InputStyle = [tw`border border-gray-300 p-3 mb-5 rounded text-lg`, { fontFamily: 'Regular' }];
 
@@ -108,7 +108,7 @@ export const CreateCharacterScreen = () => {
                     multiline
                 />
 
-                <Button onPress={handleCreateCharacter} text={'Create Character'} disabled={isLoading} />
+                <Button onPress={handleCreateCharacter} text={'Create Character'} disabled={isCreating || isUpdating} />
 
                 <Button onPress={() => {
                     if (userId && username) {

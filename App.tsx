@@ -11,12 +11,16 @@ import AppLoading from "expo-app-loading";
 import {UserPage} from "./src/user/UserPage";
 import {PaperProvider} from "react-native-paper";
 import {CreateCharacterScreen} from "./src/character/ui/CreateCharacterScreen";
+import {EditCharacterScreen} from "./src/character/ui/EditCharacterScreen";
+import {CharacterList} from "./src/character/ui/CharacterList";
 
 export type RootStackParamList = {
     Login: undefined;
     Register: undefined;
     UserPage: { userId: string; username: string;};
     CreateCharacter: undefined;
+    CharacterList: undefined
+    EditCharacter: {characterId: string;}
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -42,9 +46,14 @@ function RootStack() {
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegistrationScreen} />
             <Stack.Screen name="CreateCharacter" component={CreateCharacterScreen} />
+            <Stack.Screen name="CharacterList" component={CharacterList} />
             <Stack.Screen
                 name="UserPage"
                 component={UserPage}
+            />
+            <Stack.Screen
+                name="EditCharacter"
+                component={EditCharacterScreen}
             />
         </Stack.Navigator>
     );

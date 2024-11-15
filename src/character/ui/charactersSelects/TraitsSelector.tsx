@@ -3,7 +3,7 @@ import {Button, Menu} from "react-native-paper";
 import {availableTraits} from "../../data/charactersData";
 import {View} from "react-native";
 import React from "react";
-import {useCreateCharacter} from "../../model/useCreateCharacter";
+import {useCharacterForm} from "../../model/useCharacterForm";
 import {Traits} from "../../../common/types";
 
 type Props = {
