@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from "../../App";
 import {Typography} from "../common/components/Typography";
@@ -7,6 +7,7 @@ import {Button} from "../common/components/Button";
 import {useNavigation} from "@react-navigation/native";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {CharacterList} from "../character/ui/CharacterList";
+import tw from "twrnc";
 
 type UserPageProps = StackScreenProps<RootStackParamList, 'UserPage'>;
 
@@ -18,8 +19,8 @@ export const UserPage = ({route}: UserPageProps) => {
     const navigation = useNavigation<UserPageScreenNavigationProp>();
 
     return (
-        <View style={[styles.container]}>
-            <Typography text={'Profile'} variant={'title2'}/>
+        <View style={tw`flex-1 justify-center items-center mx-5 mt-12`}>
+            <Typography text={'Profile'} variant={'title'}/>
             {/*<Text>UserId: {userId}</Text>*/}
             {/*<Text>Username: {username}</Text>*/}
             <View>
@@ -30,17 +31,3 @@ export const UserPage = ({route}: UserPageProps) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginHorizontal: 20,
-        marginTop: 50
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
-});

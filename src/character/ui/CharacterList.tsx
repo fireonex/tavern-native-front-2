@@ -58,6 +58,9 @@ export const CharacterList = () => {
     return (
         <>
             <ScrollView contentContainerStyle={tw`px-5 pt-5`}>
+                <View style={tw`py-4`}>
+                    <Typography text={'Characters'} variant={'title2'}/>
+                </View>
                 {characters.slice().reverse().map((character: Character) => (
                     <View key={character._id} style={tw`mb-5 border rounded-lg border-gray-300 p-2 max-w-[340px]`}>
                         <View>
@@ -94,7 +97,7 @@ export const CharacterList = () => {
                         }
                         <Button
                             text={'Edit character'}
-                            onPress={() => navigation.navigate('EditCharacter', { characterId: character._id })}
+                            onPress={() => navigation.navigate('EditCharacter', {characterId: character._id})}
                             disabled={isDeleting}
                         />
                         <Button text={'Delete character'} onPress={() => handleDeleteCharacter(character._id)}
@@ -103,17 +106,17 @@ export const CharacterList = () => {
                 ))}
             </ScrollView>
             {(successMessage || errorMessage) && (
-            <Alert
-                message={successMessage || errorMessage || ''}
-                type={successMessage ? 'success' : 'error'}
-                visible={alertVisible}
-                onDismiss={() => {
-                    setAlertVisible(false);
-                    setSuccessMessage(null);
-                    setErrorMessage(null);
-                }}
-            />
-        )}
+                <Alert
+                    message={successMessage || errorMessage || ''}
+                    type={successMessage ? 'success' : 'error'}
+                    visible={alertVisible}
+                    onDismiss={() => {
+                        setAlertVisible(false);
+                        setSuccessMessage(null);
+                        setErrorMessage(null);
+                    }}
+                />
+            )}
         </>
     );
 };

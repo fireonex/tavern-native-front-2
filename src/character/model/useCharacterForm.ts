@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {useCreateCharacterMutation, useUpdateCharacterMutation} from '../api/characterApi';
 import { Gender, SocialClasses, Traits, Race } from '../../common/types';
 
-type UseCharacterFormProps = {
+type UseCharacterForm = {
     initialCharacter?: {
         name: string;
         age: string;
@@ -20,9 +20,9 @@ export const useCharacterForm = ({
                                      initialCharacter,
                                      operation,
                                      characterId,
-                                 }: UseCharacterFormProps) => {
+                                 }: UseCharacterForm) => {
     const [name, setName] = useState(initialCharacter?.name || '');
-    const [age, setAge] = useState(initialCharacter?.age || '');
+    const [age, setAge] = useState(initialCharacter?.age ? String(initialCharacter.age) : '');
     const [gender, setGender] = useState(initialCharacter?.gender || '');
     const [socialClass, setSocialClass] = useState(initialCharacter?.socialClass || '');
     const [traits, setTraits] = useState<string[]>(initialCharacter?.traits || []);
@@ -106,8 +106,8 @@ export const useCharacterForm = ({
             setAlertVisible(true);
             resetFields();
         } catch (err) {
-            console.error('Failed to create character:', err);
-            setAlertMessage('Failed to create character');
+            console.error('Create/update error: ', err);
+            setAlertMessage('Failed to create/update character');
             setAlertType('error');
             setAlertVisible(true);
         }
@@ -151,6 +151,7 @@ export const useCharacterForm = ({
         genderMenuVisible,
         setGenderMenuVisible,
         handleCreateCharacter: handleFormSubmit,
+        handleUpdateCharacter: handleFormSubmit,
         isSuccess,
         // Уведомления
         alertVisible,
@@ -158,5 +159,6 @@ export const useCharacterForm = ({
         alertMessage,
         alertType,
         setAlertMessage,
+        setAlertType,
     };
 };
