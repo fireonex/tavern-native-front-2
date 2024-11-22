@@ -3,15 +3,18 @@ import {Button, Menu} from "react-native-paper";
 import {genders} from "../../data/charactersData";
 import {View} from "react-native";
 import React from "react";
+import {useCharacterForm} from "../../model/useCharacterForm";
+import {useCharacterFormContext} from "../../model/useCharacterContext";
 
-type Props = {
-    gender: string
-    setGender: (gender: string) => void
-    genderMenuVisible: boolean
-    setGenderMenuVisible: (genderMenuVisible: boolean) => void
-}
 
-export const GenderSelector = ({gender, setGender, genderMenuVisible, setGenderMenuVisible}: Props) => {
+export const GenderSelector = () => {
+
+    const {
+        gender,
+        setGender,
+        genderMenuVisible,
+        setGenderMenuVisible
+    } = useCharacterFormContext()
 
     return (
         <View style={tw`mb-5`}>

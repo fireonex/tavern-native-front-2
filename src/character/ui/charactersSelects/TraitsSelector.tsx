@@ -3,17 +3,11 @@ import {Button, Menu} from "react-native-paper";
 import {availableTraits} from "../../data/charactersData";
 import {View} from "react-native";
 import React from "react";
-import {useCharacterForm} from "../../model/useCharacterForm";
-import {Traits} from "../../../common/types";
+import {useCharacterFormContext} from "../../model/useCharacterContext";
 
-type Props = {
-    traitsMenuVisible: boolean,
-    setTraitsMenuVisible: (visible: boolean) => void,
-    setTraits: (traits: string[]) => void,
-    traits: string[]
-}
+export const TraitsSelector = () => {
 
-export const TraitsSelector = ({traitsMenuVisible, setTraitsMenuVisible, traits, setTraits}: Props) => {
+    const {traitsMenuVisible, setTraitsMenuVisible, traits, setTraits} = useCharacterFormContext()
 
     return (
         <View style={tw`mb-5`}>

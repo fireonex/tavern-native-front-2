@@ -3,20 +3,14 @@ import {Button, Menu} from "react-native-paper";
 import {socialClasses} from "../../data/charactersData";
 import {View} from "react-native";
 import React from "react";
+import {useCharacterFormContext} from "../../model/useCharacterContext";
 
-type Props = {
-    socialClass: string
-    setSocialClass: (socialClass: string) => void
-    socialClassMenuVisible: boolean
-    setSocialClassMenuVisible: (socialClassMenuVisible: boolean) => void
-}
+export const SocialClassSelector = () => {
 
-export const SocialClassSelector = ({
-                                        setSocialClass,
-                                        socialClassMenuVisible,
-                                        setSocialClassMenuVisible,
-                                        socialClass
-                                    }: Props) => {
+    const {setSocialClass,
+        socialClassMenuVisible,
+        setSocialClassMenuVisible,
+        socialClass} = useCharacterFormContext()
 
     return (
         <View style={tw`mb-5`}>

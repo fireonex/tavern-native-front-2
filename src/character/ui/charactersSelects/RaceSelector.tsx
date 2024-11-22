@@ -3,15 +3,12 @@ import {Button, Menu} from "react-native-paper";
 import {availableRaces} from "../../data/charactersData";
 import {View} from "react-native";
 import React from "react";
+import {useCharacterForm} from "../../model/useCharacterForm";
+import {useCharacterFormContext} from "../../model/useCharacterContext";
 
-type Props = {
-    race: string
-    setRace: (race: string) => void
-    raceMenuVisible: boolean
-    setRaceMenuVisible: (raceMenuVisible: boolean) => void
-}
 
-export const RaceSelector = ({race, setRace, raceMenuVisible, setRaceMenuVisible}: Props) => {
+export const RaceSelector = () => {
+    const {race, setRace, raceMenuVisible, setRaceMenuVisible} = useCharacterFormContext()
 
     return (
         <View style={tw`mb-5`}>

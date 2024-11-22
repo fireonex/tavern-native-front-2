@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Provider} from "react-redux";
 
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import {LoginScreen} from "./src/auth/ui/LoginScreen";
 import {NavigationContainer} from "@react-navigation/native";
 import {RegistrationScreen} from "./src/auth/ui/RegistrationScreen";
@@ -10,17 +10,17 @@ import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import {UserPage} from "./src/user/UserPage";
 import {PaperProvider} from "react-native-paper";
-import {CreateCharacterScreen} from "./src/character/ui/CreateCharacterScreen";
-import {EditCharacterScreen} from "./src/character/ui/EditCharacterScreen";
 import {CharacterList} from "./src/character/ui/CharacterList";
+import {EditCharacterScreenContext} from "./src/character/ui/contextUi/EditCharacterScreenContext";
+import {CreateCharacterScreenContext} from "./src/character/ui/contextUi/CreateCharacterScreenContext";
 
 export type RootStackParamList = {
     Login: undefined;
     Register: undefined;
-    UserPage: { userId: string; username: string;};
+    UserPage: { userId: string; username: string; };
     CreateCharacter: undefined;
     CharacterList: undefined
-    EditCharacter: {characterId: string;}
+    EditCharacter: { characterId: string; }
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -40,20 +40,20 @@ function RootStack() {
             initialRouteName="Login"
             screenOptions={{
                 headerShown: false,
-                cardStyle: { backgroundColor: 'white' },
+                cardStyle: {backgroundColor: 'white'},
             }}
         >
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegistrationScreen} />
-            <Stack.Screen name="CreateCharacter" component={CreateCharacterScreen} />
-            <Stack.Screen name="CharacterList" component={CharacterList} />
+            <Stack.Screen name="Login" component={LoginScreen}/>
+            <Stack.Screen name="Register" component={RegistrationScreen}/>
+            <Stack.Screen name="CreateCharacter" component={CreateCharacterScreenContext}/>
+            <Stack.Screen name="CharacterList" component={CharacterList}/>
             <Stack.Screen
                 name="UserPage"
                 component={UserPage}
             />
             <Stack.Screen
                 name="EditCharacter"
-                component={EditCharacterScreen}
+                component={EditCharacterScreenContext}
             />
         </Stack.Navigator>
     );
@@ -75,7 +75,7 @@ export default function App() {
         <Provider store={store}>
             <NavigationContainer>
                 <PaperProvider>
-                    <RootStack/>
+                        <RootStack/>
                 </PaperProvider>
             </NavigationContainer>
         </Provider>
