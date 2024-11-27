@@ -9,6 +9,9 @@ import {Alert} from "../../common/components/Alert";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../../App";
 import {useNavigation} from "@react-navigation/native";
+import {InlineButton} from "../../common/components/InlineButton";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
 
 export type CharacterListNavigationProp =
     NativeStackNavigationProp<RootStackParamList, 'CharacterList'>;
@@ -21,6 +24,9 @@ export const CharacterList = () => {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [alertVisible, setAlertVisible] = useState(false);
+
+    const userId = useSelector((state: RootState) => state.auth.userId);
+    const username = useSelector((state: RootState) => state.auth.username);
 
     const handleDeleteCharacter = async (characterId: string) => {
         try {
@@ -56,11 +62,25 @@ export const CharacterList = () => {
     const viewBoxStyle = tw`p-2 border border-gray-300 rounded flex flex-row gap-2`;
 
     return (
-        <>
-            <ScrollView contentContainerStyle={tw`px-5 pt-5`}>
-                <View style={tw`py-4`}>
-                    <Typography text={'Characters'} variant={'title2'}/>
+        <View style={tw`mx-5 mt-12 flex-1 justify-center items-center`}>
+            <View style={tw`py-4 flex flex-row justify-between w-full`}>
+                <View style={tw``}>
+                    <InlineButton text={'←'} textSize={'3xl'} onPress={() => {
+                        if (userId && username) {
+                            navigation.navigate('UserPage', {
+                                userId: userId,
+                                username: username,
+                            });
+                        } else {
+                            console.error('User information is missing. Please login again.');
+                        }
+                    }}/>
                 </View>
+                <View style={tw`fixed right-[10%]`}>
+                    <Typography text={'Characters'} variant={'title'}/>
+                </View>
+            </View>
+            <ScrollView contentContainerStyle={tw`px-5 pt-5`}>
                 {characters.slice().reverse().map((character: Character) => (
                     <View key={character._id} style={tw`mb-5 border rounded-lg border-gray-300 p-2 max-w-[340px]`}>
                         <View>
@@ -117,6 +137,6 @@ export const CharacterList = () => {
                     }}
                 />
             )}
-        </>
+        </View>
     );
 };
