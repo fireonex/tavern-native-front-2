@@ -1,57 +1,71 @@
-import React, { useState } from 'react';
-import { View, Text, Button, ScrollView } from 'react-native';
-import tw from 'twrnc';
-import axios from 'axios';
-import {StackScreenProps} from "@react-navigation/stack";
+import React, {useEffect, useState} from 'react';
+import {DialogueResponse} from "../api/types";
+import {useFetchDialogueMutation} from "../api/tavernDialogueApi";
 import {RootStackParamList} from "../../../App";
-type TavernScreenProps = StackScreenProps<RootStackParamList, 'Tavern'>;
+import {StackScreenProps} from "@react-navigation/stack";
+import {Text, View} from "react-native";
+import {Button} from "../../common/components/Button";
 
+type TavernScreenProps = StackScreenProps<RootStackParamList, 'Tavern'>;
 export const TavernScreen = ({route}: TavernScreenProps) => {
     const {userId, characterId} = route.params;
-    const [dialogue, setDialogue] = useState<string | null>(null);
-    const [options, setOptions] = useState<{ action: string; label: string }[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [dialogue, setDialogue] = useState<DialogueResponse | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
-    const fetchDialogue = async (action: string | null = null) => {
-        setLoading(true);
-        try {
-            const response = await axios.post('http://192.168.0.109:5000/api/dialogue/continue', {
-                userId,
-                characterId,
-                action,
+    const [fetchDialogue, {data, error: apiError, isLoading}] = useFetchDialogueMutation();
+
+    useEffect(() => {
+        // Логируем запрос на начало диалога
+        console.log('Requesting initial dialogue...');
+
+        // Запрашиваем начальный диалог
+        fetchDialogue({userId, characterId, action: 'entry'})
+            .unwrap()
+            .then((response) => {
+                console.log('Initial dialogue response:', response);
+                setDialogue(response);
+                setError(null); // Если запрос успешен, сбрасываем ошибку
+            })
+            .catch((err) => {
+                console.error('Error during initial dialogue fetch:', err);
+                setError(err.message || 'Server error');
             });
+    }, [userId, characterId, fetchDialogue]);
 
-            setDialogue(response.data.message);
-            setOptions(response.data.options);
-        } catch (err) {
-            console.error('Failed to fetch dialogue:', err);
-        } finally {
-            setLoading(false);
-        }
+    const handleAction = (action: string) => {
+        console.log('Sending action:', action); // Логирование действия
+
+        fetchDialogue({userId, characterId, action})
+            .unwrap()
+            .then((response) => {
+                console.log('Action response:', response); // Логируем ответ после выполнения действия
+                setDialogue(response);
+                setError(null);
+            })
+            .catch((err) => {
+                console.error('Error performing action:', err);
+                setError(err.message || 'Server error');
+            });
     };
 
-    // Инициируем диалог, когда компонент впервые монтируется
-    React.useEffect(() => {
-        fetchDialogue();
-    }, []);
+    if (isLoading) {
+        return <Text>Loading...</Text>;
+    }
 
-    if (loading) {
-        return <Text>Загрузка...</Text>;
+    if (error) {
+        return <Text>Error: {error}</Text>;
     }
 
     return (
-        <ScrollView contentContainerStyle={tw`p-5`}>
-            <View style={tw`mb-5`}>
-                {dialogue && <Text style={tw`text-lg mb-4`}>{dialogue}</Text>}
-
-                {options.map((option, index) => (
-                    <Button
-                        key={index}
-                        title={option.label}
-                        onPress={() => fetchDialogue(option.action)}
-                    />
-                ))}
-            </View>
-        </ScrollView>
+        <View>
+            <Text>{dialogue?.message}</Text>
+            {dialogue?.options && (
+                <View>
+                    {dialogue.options.map((option, index) => (
+                        <Button text={option.label} onPress={() => handleAction(option.action)}/>
+                    ))}
+                </View>
+            )}
+        </View>
     );
 };
