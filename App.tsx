@@ -13,6 +13,7 @@ import {PaperProvider} from "react-native-paper";
 import {CharacterList} from "./src/character/ui/CharacterList";
 import {EditCharacterScreenContext} from "./src/character/ui/contextUi/EditCharacterScreenContext";
 import {CreateCharacterScreenContext} from "./src/character/ui/contextUi/CreateCharacterScreenContext";
+import {TavernScreen} from "./src/dialogue/ui/TavernScreen";
 
 export type RootStackParamList = {
     Login: undefined;
@@ -21,6 +22,7 @@ export type RootStackParamList = {
     CreateCharacter: undefined;
     CharacterList: undefined
     EditCharacter: { characterId: string; }
+    Tavern: { characterId: string, userId: string }
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -54,6 +56,10 @@ function RootStack() {
             <Stack.Screen
                 name="EditCharacter"
                 component={EditCharacterScreenContext}
+            />
+            <Stack.Screen
+                name="Tavern"
+                component={TavernScreen}
             />
         </Stack.Navigator>
     );

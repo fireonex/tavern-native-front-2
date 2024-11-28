@@ -27,7 +27,6 @@ export const UserPage = ({route}: UserPageProps) => {
                 <ImageButton image={createCharactersPic} onPress={() => navigation.navigate('CreateCharacter')}
                         text={'Create character'}/>
                 <ImageButton image={charactersPic} text={'View characters'} onPress={() => navigation.navigate('CharacterList')}/>
-                <ImageButton text={'Go to the tavern'}/>
             </View>
             {/*<CharacterList/>*/}
         </View>

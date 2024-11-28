@@ -12,6 +12,7 @@ import {useNavigation} from "@react-navigation/native";
 import {InlineButton} from "../../common/components/InlineButton";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store";
+import {ImageButton} from "../../common/components/ImageButton";
 
 export type CharacterListNavigationProp =
     NativeStackNavigationProp<RootStackParamList, 'CharacterList'>;
@@ -122,6 +123,7 @@ export const CharacterList = () => {
                         />
                         <Button text={'Delete character'} onPress={() => handleDeleteCharacter(character._id)}
                                 disabled={isDeleting}/>
+                        <ImageButton text={'Go to the tavern'} onPress={() => navigation.navigate('Tavern', {characterId: character._id, userId: character.userId})}/>
                     </View>
                 ))}
             </ScrollView>
