@@ -4,10 +4,10 @@ import tw from 'twrnc';
 import {Alert} from "../../common/components/Alert";
 import {useCharacterFormContext} from "../model/useCharacterContext";
 import {CharacterForm} from "./CharacterForm";
+import {useTavernScreen} from "../../dialogue/model/useTavernScreen";
 
 
 export const EditCharacterScreen = () => {
-
     const {
         alertVisible,
         setAlertVisible,

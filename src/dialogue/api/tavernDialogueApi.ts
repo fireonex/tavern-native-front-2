@@ -25,8 +25,15 @@ export const tavernDialogueApi = createApi({
                 body: { userId, characterId, action },
             }),
         }),
+        endDialogue: builder.mutation<void, { userId: string, characterId: string }>({
+            query: ({ userId, characterId }) => ({
+                url: '/end',
+                method: 'DELETE',
+                body: { userId, characterId },
+            }),
+        }),
     }),
 });
 
-export const { useFetchDialogueMutation } = tavernDialogueApi;
+export const { useFetchDialogueMutation, useEndDialogueMutation } = tavernDialogueApi;
 

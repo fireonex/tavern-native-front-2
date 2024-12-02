@@ -1,51 +1,42 @@
-import React, {useEffect, useState} from 'react';
-import {DialogueResponse} from "../api/types";
-import {useFetchDialogueMutation} from "../api/tavernDialogueApi";
+import React, {useEffect} from 'react';
 import {RootStackParamList} from "../../../App";
 import {StackScreenProps} from "@react-navigation/stack";
 import {Text, View} from "react-native";
 import {Button} from "../../common/components/Button";
+import tw from "twrnc";
+import {Typography} from "../../common/components/Typography";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {useTavernScreen} from "../model/useTavernScreen";
 
 type TavernScreenProps = StackScreenProps<RootStackParamList, 'Tavern'>;
+export type TavernScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Tavern'>;
 export const TavernScreen = ({route}: TavernScreenProps) => {
-    const {userId, characterId} = route.params;
-    const [dialogue, setDialogue] = useState<DialogueResponse | null>(null);
-    const [error, setError] = useState<string | null>(null);
 
-    const [fetchDialogue, {data, error: apiError, isLoading}] = useFetchDialogueMutation();
+    const {
+        handleExitTavern,
+        userId,
+        characterId,
+        firstFetchDialogueHandler,
+        nextFetchDialogueHandler,
+        fetchDialogue,
+        isLoading,
+        error,
+        dialogue,
+        navigation
+    } = useTavernScreen(route)
 
     useEffect(() => {
-        // Логируем запрос на начало диалога
-        console.log('Requesting initial dialogue...');
+        return () => {
+            handleExitTavern();
+        };
+    }, [userId, characterId]);
 
-        // Запрашиваем начальный диалог
-        fetchDialogue({userId, characterId, action: 'entry'})
-            .unwrap()
-            .then((response) => {
-                console.log('Initial dialogue response:', response);
-                setDialogue(response);
-                setError(null); // Если запрос успешен, сбрасываем ошибку
-            })
-            .catch((err) => {
-                console.error('Error during initial dialogue fetch:', err);
-                setError(err.message || 'Server error');
-            });
+    useEffect(() => {
+        firstFetchDialogueHandler()
     }, [userId, characterId, fetchDialogue]);
 
     const handleAction = (action: string) => {
-        console.log('Sending action:', action); // Логирование действия
-
-        fetchDialogue({userId, characterId, action})
-            .unwrap()
-            .then((response) => {
-                console.log('Action response:', response); // Логируем ответ после выполнения действия
-                setDialogue(response);
-                setError(null);
-            })
-            .catch((err) => {
-                console.error('Error performing action:', err);
-                setError(err.message || 'Server error');
-            });
+        nextFetchDialogueHandler(action)
     };
 
     if (isLoading) {
@@ -57,8 +48,8 @@ export const TavernScreen = ({route}: TavernScreenProps) => {
     }
 
     return (
-        <View>
-            <Text>{dialogue?.message}</Text>
+        <View style={tw`my-30 mx-5`}>
+            <Typography text={dialogue?.message || ''} variant={'regularTitle'}/>
             {dialogue?.options && (
                 <View>
                     {dialogue.options.map((option, index) => (
@@ -66,6 +57,10 @@ export const TavernScreen = ({route}: TavernScreenProps) => {
                     ))}
                 </View>
             )}
+            <Button text={'End'} onPress={() => {
+                handleExitTavern();
+                navigation.navigate('CharacterList');
+            }}/>
         </View>
     );
 };
