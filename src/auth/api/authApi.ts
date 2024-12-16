@@ -5,12 +5,11 @@ import {GetUserResponse, LoginRequest, LoginResponse, RegisterRequest, RegisterR
 export const authApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://192.168.0.109:5000/api/users/',
+        baseUrl: 'https://cea1-89-23-5-24.ngrok-free.app/api/users/',
         prepareHeaders: (headers) => {
             headers.set('Content-Type', 'application/json');
             return headers;
         },
-        timeout: 30000,
     }),
     endpoints: (builder) => ({
         loginUser: builder.mutation<LoginResponse, LoginRequest>({

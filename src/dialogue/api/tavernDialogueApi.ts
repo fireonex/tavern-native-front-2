@@ -5,7 +5,7 @@ import { DialogueRequest, DialogueResponse } from './types'; // Импортир
 export const tavernDialogueApi = createApi({
     reducerPath: 'tavernDialogueApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://192.168.0.109:5000/api/dialogue',
+        baseUrl: 'https://cea1-89-23-5-24.ngrok-free.app/api/dialogue',
         prepareHeaders: (headers, { getState }) => {
             const token = (getState() as RootState).auth.token;
             if (token) {

@@ -11,7 +11,7 @@ import {Character} from "../../common/types";
 export const characterApi = createApi({
     reducerPath: 'characterApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://192.168.0.109:5000/api/',
+        baseUrl: 'https://cea1-89-23-5-24.ngrok-free.app/api/',
         prepareHeaders: (headers, {getState}) => {
             const token = (getState() as RootState).auth.token;
             if (token) {

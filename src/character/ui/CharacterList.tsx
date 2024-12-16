@@ -124,6 +124,7 @@ export const CharacterList = () => {
                         <Button text={'Delete character'} onPress={() => handleDeleteCharacter(character._id)}
                                 disabled={isDeleting}/>
                         <ImageButton text={'Go to the tavern'} onPress={() => navigation.navigate('Tavern', {characterId: character._id, userId: character.userId})}/>
+                        {/*<ImageButton text={'Chatbot'} onPress={() => navigation.navigate('Chatbot', {character})}/>*/}
                     </View>
                 ))}
             </ScrollView>
