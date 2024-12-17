@@ -1,20 +1,15 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import {createApi} from '@reduxjs/toolkit/query/react';
 import {GetUserResponse, LoginRequest, LoginResponse, RegisterRequest, RegisterResponse} from "./types";
+import {ProjBaseQuery} from "../../common/api/baseQuery";
 
 
 export const authApi = createApi({
     reducerPath: 'userApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: 'https://cea1-89-23-5-24.ngrok-free.app/api/users/',
-        prepareHeaders: (headers) => {
-            headers.set('Content-Type', 'application/json');
-            return headers;
-        },
-    }),
+    baseQuery: ProjBaseQuery,
     endpoints: (builder) => ({
         loginUser: builder.mutation<LoginResponse, LoginRequest>({
             query: (credentials) => ({
-                url: 'login',
+                url: 'users/login',
                 method: 'POST',
                 body: credentials,
             }),
@@ -22,7 +17,7 @@ export const authApi = createApi({
 
         registerUser: builder.mutation<RegisterResponse, RegisterRequest>({
             query: (userData) => ({
-                url: 'register',
+                url: 'users/register',
                 method: 'POST',
                 body: userData,
             }),
@@ -30,7 +25,7 @@ export const authApi = createApi({
 
         getUser: builder.query<GetUserResponse, string>({
             query: (id) => ({
-                url: `user/${id}`,
+                url: `users/user/${id}`,
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${id}`,
