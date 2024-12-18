@@ -14,6 +14,7 @@ import {CharacterList} from "./src/character/ui/CharacterList";
 import {EditCharacterScreenContext} from "./src/character/ui/contextUi/EditCharacterScreenContext";
 import {CreateCharacterScreenContext} from "./src/character/ui/contextUi/CreateCharacterScreenContext";
 import {TavernScreen} from "./src/dialogue/ui/TavernScreen";
+import {Character} from "./src/common/types";
 
 export type RootStackParamList = {
     Login: undefined;
@@ -23,6 +24,7 @@ export type RootStackParamList = {
     CharacterList: undefined
     EditCharacter: { characterId: string; }
     Tavern: { characterId: string, userId: string }
+    Chatbot: { character: Character }
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -61,6 +63,10 @@ function RootStack() {
                 name="Tavern"
                 component={TavernScreen}
             />
+            {/*<Stack.Screen*/}
+            {/*    name="Chatbot"*/}
+            {/*    component={ChatbotScreen}*/}
+            {/*/>*/}
         </Stack.Navigator>
     );
 }
